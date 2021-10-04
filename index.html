@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Testing Grounds Rolelist Randomizer</title>
+		<link rel="stylesheet" href="style.css"/>
+		<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+		<script src="all_roles.js"></script>
+		<script src="role_categories.js"></script>
+		<script src="rolelist-presets.js"></script>
+		<script src="randomizer.js"></script>
+	</head>
+	<body>
+		<div class="options">
+			<div class="test-roles">
+				Test Roles:
+				<label>Name:<br><textarea id="test-role-names" rows="6" cols="8"></textarea></label>
+				<label>Weight:<br><textarea id="test-role-weights" rows="6" cols="8"></textarea></label>
+			</div>
+			<label><input type="checkbox" id="coven-on">Enable Coven Roles</label>
+			<label>Mafia/Coven Limit: <input type="number" value="4" min="0" max="9" size="1" id="faction-limit"><label>
+		</div>
+		<div class="rolelist">
+			<label>Rolelist:<br><textarea id="rolelist" rows="15" cols="20"></textarea></label>
+			<label>Presets: <select id="rolelist-presets"></select></label>
+		</div>
+		<div class="playerlist">
+			<label>Player Names:<br><textarea id="playerlist" rows="15" cols="20"></textarea></label>
+		</div>
+		<div class="results">
+			<label>Results:<br><textarea id="results" rows="15" cols="25"></textarea></label>
+		</div>
+		<button id="roll-button">Roll</button>
+	</body>
+</html>

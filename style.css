@@ -1,0 +1,22 @@
+html {
+	background: #9bf;
+	text-align: center;
+}
+.options, .rolelist, .playerlist {
+	display: inline-block;
+	min-width: 20%;
+	min-height: 40%;
+	text-align: left;
+}
+label {
+	display: block;
+	margin: auto;
+}
+.test-roles label {
+	display: table-cell;
+}
+.options input[type=number] {
+	width: 2em;
+}
+.rolelist textarea, .playerlist textarea {
+}
