@@ -113,6 +113,17 @@ $(function() {
 					break;
 				}
 			}
+
+			var mafia_default_leader = options.find(function(role) {
+				return all_roles[role].mafia_leader;
+			});
+			var mafia_has_leader = selected_roles.find(function(role) {
+				return all_roles[role].mafia_leader;
+			});
+			if(mafia_default_leader && !mafia_has_leader && mafia_roles.includes(entry.selected_role) && !all_roles[entry.selected_role].mafia_leader) {
+				entry.selected_role = mafia_default_leader;
+			}
+
 			if(entry.selected_role) selected_roles.push(entry.selected_role);
 		}
 		rolelist_expanded = rolelist_expanded.sort(function(a, b) {
