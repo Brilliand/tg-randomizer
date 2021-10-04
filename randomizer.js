@@ -84,7 +84,8 @@ $(function() {
 				slot_num: i+1,
 				list: list,
 			};
-		}).sort(function(a, b) {
+		});
+		rolelist_expanded = shuffle(rolelist_expanded).sort(function(a, b) {
 			return a.list.length - b.list.length;
 		});
 		var selected_roles = [];
