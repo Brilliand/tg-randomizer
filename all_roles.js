@@ -70,4 +70,5 @@ var all_roles = {
 	"Coroner": {limit: 6, test_role: true, category: "Town Investigative"},
 	"Agent": {limit: 6, test_role: true, category: "Mafia Deception"},
 	"Ritualist": {limit: 1, coven: true, test_role: true, category: "Coven Evil"},
+	"Servant": {limit: 6, test_role: true, category: "Neutral Benign"},
 };
