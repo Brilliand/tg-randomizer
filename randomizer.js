@@ -16,6 +16,9 @@ function shuffle(array) {
   return array;
 }
 
+var role_categories = {};
+var case_lookup = {};
+
 function expandCategory(category) {
 	category = case_lookup[category.toUpperCase()];
 	if(category) {
@@ -37,29 +40,46 @@ function expandCategory(category) {
 
 $(function() {
 	$("#roll-button").click(function() {
-		var test_roles_enabled = {};
+		var test_roles = {};
 		var coven_roles_enabled = $("#coven-on").prop("checked");
 		var faction_limit = $("#faction-limit").val();
 
+		role_categories = $.extend({}, role_meta_categories);
+		case_lookup = $.extend({}, case_lookup_base);
+
 		var test_role_names = $("#test-role-names").val().split(/\r\n|\r|\n/);
+		var test_role_alignments = $("#test-role-alignments").val().split(/\r\n|\r|\n/);
+		var test_role_limits = $("#test-role-limits").val().split(/\r\n|\r|\n/);
 		var test_role_weights = $("#test-role-weights").val().split(/\r\n|\r|\n/);
 		for(var i = 0; i < test_role_names.length; i++) {
 			var line = test_role_names[i].trim();
 			if(line == "") continue;
-			var name = case_lookup[line.toUpperCase()];
-			if(typeof name === 'undefined') {
-				alert('"'+test_role_names[i].trim()+'" role is missing.');
-				return;
+			var name = case_lookup[line.toUpperCase()] || line;
+
+			test_roles[name] = {limit: 6};
+			var category = test_role_alignments[i].trim();
+			if(category) {
+				test_roles[name].category = case_lookup[category.toUpperCase()] || category;
 			}
+			var limit = parseInt(test_role_limits[i]);
+			if(limit > 0) test_roles[name].limit = limit;
 			var weight = parseFloat(test_role_weights[i]);
-			if(weight > 0) all_roles[name].weight = weight;
-			if(all_roles[name].category) {
-				var category = all_roles[name].category;
-				if(!role_categories[category].includes(name)) {
-					role_categories[category].push(name);
-				}
+			if(weight > 0) test_roles[name].weight = weight;
+		}
+
+		var all_roles = $.extend({}, all_roles_base, test_roles);
+		for(var x in all_roles) {
+			case_lookup[x.toUpperCase()] = x;
+
+			var category = all_roles[x].category;
+			if(category) {
+				role_categories[category] = (role_categories[category] || []).concat([x]);
 			}
-			test_roles_enabled[name] = true;
+		}
+		for(var x in role_categories) {
+			case_lookup[x.toUpperCase()] = x;
+			var acronym = x.replace(/[^A-Z]/g, "");
+			if(acronym && acronym.length < 5) case_lookup[acronym] = x;
 		}
 
 		var rolelist = $("#rolelist").val().split(/\r\n|\r|\n/);
@@ -73,8 +93,6 @@ $(function() {
 			});
 			for(var role in included_roles) {
 				if(typeof all_roles[role].coven !== 'undefined' && all_roles[role].coven !== coven_roles_enabled) {
-					delete included_roles[role];
-				} else if(all_roles[role].test_role && !test_roles_enabled[role]) {
 					delete included_roles[role];
 				}
 			}

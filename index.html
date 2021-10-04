@@ -4,16 +4,18 @@
 		<title>Testing Grounds Rolelist Randomizer</title>
 		<link rel="stylesheet" href="style.css"/>
 		<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-		<script src="all_roles.js?version=2"></script>
-		<script src="role_categories.js"></script>
+		<script src="all_roles.js?version=3"></script>
+		<script src="role_categories.js?version=1"></script>
 		<script src="rolelist-presets.js"></script>
-		<script src="randomizer.js?version=1"></script>
+		<script src="randomizer.js?version=2"></script>
 	</head>
 	<body>
 		<div class="options">
 			<div class="test-roles">
 				Test Roles:
-				<label>Name:<br><textarea id="test-role-names" rows="6" cols="8"></textarea></label>
+				<label>Name:<br><textarea id="test-role-names" rows="6" cols="12"></textarea></label>
+				<label>Alignment:<br><textarea id="test-role-alignments" rows="6" cols="12"></textarea></label>
+				<label><span title="Maximum number of this role that can appear in-game (6 is the default)">Limit:</span><br><textarea id="test-role-limits" rows="6" cols="2"></textarea></label>
 				<label><span title="Adjust the probability of this role rolling (1 is the default)">Weight:</span><br><textarea id="test-role-weights" rows="6" cols="8"></textarea></label>
 			</div>
 			<label><input type="checkbox" id="coven-on">Enable Coven Roles</label>
