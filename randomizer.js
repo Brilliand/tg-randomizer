@@ -57,7 +57,7 @@ $(function() {
 			if(line == "") continue;
 			var name = case_lookup[line.toUpperCase()] || line;
 
-			test_roles[name] = {limit: 6};
+			test_roles[name] = {};
 			if(test_role_alignments[i] && test_role_alignments[i].trim()) {
 				var category = test_role_alignments[i].trim();
 				test_roles[name].category = case_lookup[category.toUpperCase()] || category;
@@ -72,7 +72,10 @@ $(function() {
 			}
 		}
 
-		var all_roles = $.extend({}, all_roles_base, test_roles);
+		var all_roles = $.extend({}, all_roles_base);
+		for(var x in test_roles) {
+			all_roles[x] = $.extend({limit: 6}, all_roles[x], test_roles[x]);
+		}
 		for(var x in all_roles) {
 			case_lookup[x.toUpperCase()] = x;
 
