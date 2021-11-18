@@ -43,6 +43,7 @@ $(function() {
 		var test_roles = {};
 		var coven_roles_enabled = $("#coven-on").prop("checked");
 		var faction_limit = $("#faction-limit").val();
+		var mafia_must_have_leader = $("#mafia-leader").prop("checked");
 
 		role_categories = $.extend({}, role_meta_categories);
 		case_lookup = $.extend({}, case_lookup_base);
@@ -138,7 +139,7 @@ $(function() {
 			var mafia_has_leader = selected_roles.find(function(role) {
 				return all_roles[role].mafia_leader;
 			});
-			if(mafia_default_leader && !mafia_has_leader && mafia_roles.includes(entry.selected_role) && !all_roles[entry.selected_role].mafia_leader) {
+			if(mafia_must_have_leader && mafia_default_leader && !mafia_has_leader && mafia_roles.includes(entry.selected_role) && !all_roles[entry.selected_role].mafia_leader) {
 				entry.selected_role = mafia_default_leader;
 			}
 
