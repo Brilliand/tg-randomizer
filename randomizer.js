@@ -58,14 +58,18 @@ $(function() {
 			var name = case_lookup[line.toUpperCase()] || line;
 
 			test_roles[name] = {limit: 6};
-			var category = test_role_alignments[i].trim();
-			if(category) {
+			if(test_role_alignments[i] && test_role_alignments[i].trim()) {
+				var category = test_role_alignments[i].trim();
 				test_roles[name].category = case_lookup[category.toUpperCase()] || category;
 			}
-			var limit = parseInt(test_role_limits[i]);
-			if(limit > 0) test_roles[name].limit = limit;
-			var weight = parseFloat(test_role_weights[i]);
-			if(weight > 0) test_roles[name].weight = weight;
+			if(test_role_limits[i] && test_role_limits[i].trim()) {
+				var limit = parseInt(test_role_limits[i].trim());
+				if(limit >= 0) test_roles[name].limit = limit;
+			}
+			if(test_role_weights[i] && test_role_weights[i].trim()) {
+				var weight = parseFloat(test_role_weights[i].trim());
+				if(weight >= 0) test_roles[name].weight = weight;
+			}
 		}
 
 		var all_roles = $.extend({}, all_roles_base, test_roles);
@@ -114,7 +118,7 @@ $(function() {
 			var entry = rolelist_expanded[i];
 			var options = entry.list.filter(function(role) {
 				var role_limit = all_roles[role].limit;
-				if(role_limit && selected_roles.filter(a=>a === role).length >= role_limit) return false;
+				if(selected_roles.filter(a=>a === role).length >= role_limit) return false;
 				if(faction_limit) {
 					if(mafia_roles.includes(role) && selected_roles.filter(a=>mafia_roles.includes(a)).length >= faction_limit) return false;
 					if(coven_roles.includes(role) && selected_roles.filter(a=>coven_roles.includes(a)).length >= faction_limit) return false;
@@ -122,7 +126,7 @@ $(function() {
 				return true;
 			});
 			var weights = options.map(function(role) {
-				return all_roles[role].weight || 1;
+				return Number.isFinite(all_roles[role].weight) ? all_roles[role].weight : 1;
 			});
 			var rand = Math.random()*weights.reduce((a, b) => a + b, 0);
 			for(var j = 0; j < options.length; j++) {
