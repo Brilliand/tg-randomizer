@@ -140,9 +140,9 @@ $(function() {
 				}
 			}
 
-			var mafia_default_leader = options.find(function(role) {
+			var mafia_default_leader = options.filter(function(role) {
 				return all_roles[role].mafia_leader;
-			});
+			}).pop();
 			var mafia_has_leader = selected_roles.find(function(role) {
 				return all_roles[role].mafia_leader;
 			});
