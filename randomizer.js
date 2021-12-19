@@ -19,13 +19,15 @@ function shuffle(array) {
 var role_categories = {};
 var case_lookup = {};
 
-function expandCategory(category) {
+function expandCategory(category, found = []) {
 	category = case_lookup[category.toUpperCase()];
+	found = found.concat(category);
 	if(category) {
 		if(role_categories[category]) {
 			var included_roles = {};
 			role_categories[category].map(function(s) {
-				expandCategory(s).map(function(role) {
+				if(found.includes(s)) return;
+				expandCategory(s, found).map(function(role) {
 					included_roles[role] = true;
 				});
 			});
