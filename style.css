@@ -2,6 +2,9 @@ html {
 	background: #9bf;
 	text-align: center;
 }
+.categories {
+	float: left;
+}
 .options, .rolelist, .playerlist {
 	display: inline-block;
 	min-width: 20%;

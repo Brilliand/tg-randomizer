@@ -25,7 +25,7 @@ function expandCategory(category) {
 		if(role_categories[category]) {
 			var included_roles = {};
 			role_categories[category].map(function(s) {
-				expandCategory(case_lookup[s.toUpperCase()]).map(function(role) {
+				expandCategory(s).map(function(role) {
 					included_roles[role] = true;
 				});
 			});
@@ -86,13 +86,11 @@ $(function() {
 		}
 		for(var x in role_categories) {
 			case_lookup[x.toUpperCase()] = x;
-			var acronym = x.replace(/[^A-Z]/g, "");
-			if(acronym && acronym.length < 5) case_lookup[acronym] = x;
 		}
 
 		var rolelist = $("#rolelist").val().split(/\r\n|\r|\n/);
 		var rolelist_expanded = rolelist.map(function(line) {
-			var parts = line.split("|").map(s=>s.trim()).filter(s=>s);
+			var parts = line.split(",").map(s=>s.trim()).filter(s=>s);
 			var included_roles = {};
 			parts.map(function(s) {
 				expandCategory(s).map(function(role) {
