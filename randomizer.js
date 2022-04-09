@@ -44,6 +44,8 @@ $(function() {
 	$("#roll-button").click(function() {
 		var test_roles = {};
 		var coven_roles_enabled = $("#coven-on").prop("checked");
+		var tg_ar_roles_enabled = $("#ar-on").prop("checked");
+		var tg_vamp_overhaul_roles_enabled = $("#vo-on").prop("checked");
 		var faction_limit = $("#faction-limit").val();
 		var mafia_must_have_leader = $("#mafia-leader").prop("checked");
 
@@ -103,6 +105,12 @@ $(function() {
 				if(typeof all_roles[role].coven !== 'undefined' && all_roles[role].coven !== coven_roles_enabled) {
 					delete included_roles[role];
 				}
+				if(typeof all_roles[role].tg_ar !== 'undefined' && all_roles[role].tg_ar !== tg_ar_roles_enabled) {
+					delete included_roles[role];
+				}
+				if(typeof all_roles[role].tg_vamp_overhaul !== 'undefined' && all_roles[role].tg_vamp_overhaul !== tg_vamp_overhaul_roles_enabled) {
+					delete included_roles[role];
+				}
 			}
 			return Object.keys(included_roles);
 		}).map(function(list, i) {
@@ -117,6 +125,7 @@ $(function() {
 		var selected_roles = [];
 		var mafia_roles = expandCategory("Random Mafia");
 		var coven_roles = expandCategory("Random Coven");
+		var vampire_roles = expandCategory("Random Vampire");
 		for(var i = 0; i < rolelist_expanded.length; i++) {
 			var entry = rolelist_expanded[i];
 			var options = entry.list.filter(function(role) {
@@ -125,6 +134,7 @@ $(function() {
 				if(faction_limit) {
 					if(mafia_roles.includes(role) && selected_roles.filter(a=>mafia_roles.includes(a)).length >= faction_limit) return false;
 					if(coven_roles.includes(role) && selected_roles.filter(a=>coven_roles.includes(a)).length >= faction_limit) return false;
+					if(vampire_roles.includes(role) && selected_roles.filter(a=>vampire_roles.includes(a)).length >= faction_limit) return false;
 				}
 				return true;
 			});
@@ -140,15 +150,17 @@ $(function() {
 				}
 			}
 
-			var mafia_default_leader = options.filter(function(role) {
-				return all_roles[role].mafia_leader;
-			}).pop();
-			var mafia_has_leader = selected_roles.find(function(role) {
-				return all_roles[role].mafia_leader;
-			});
-			if(mafia_must_have_leader && mafia_default_leader && !mafia_has_leader && mafia_roles.includes(entry.selected_role) && !all_roles[entry.selected_role].mafia_leader) {
-				entry.selected_role = mafia_default_leader;
-			}
+			[mafia_must_have_leader ? mafia_roles : [], coven_roles, vampire_roles].map(function(faction) {
+				var default_leader = options.filter(function(role) {
+					return faction.includes(role) && all_roles[role].faction_leader;
+				}).pop();
+				var has_leader = selected_roles.find(function(role) {
+					return faction.includes(role) && all_roles[role].faction_leader;
+				});
+				if(default_leader && !has_leader && faction.includes(entry.selected_role) && !all_roles[entry.selected_role].faction_leader) {
+					entry.selected_role = default_leader;
+				}
+			})
 
 			if(entry.selected_role) selected_roles.push(entry.selected_role);
 		}

@@ -3,7 +3,8 @@ var role_meta_categories = {
 	"Random Neutral": ["Neutral Benign", "Neutral Evil", "Neutral Killing", "Neutral Chaos"],
 	"Random Mafia": ["Mafia Support", "Mafia Deception", "Mafia Killing"],
 	"Random Coven": ["Coven Evil"],
-	"Any": ["Random Town", "Random Neutral", "Random Mafia", "Random Coven"],
+	"Random Vampire": ["Vampire Killing", "Vampire Conversion", "Vampire Support", "Vampire Manipulation"],
+	"Any": ["Random Town", "Random Neutral", "Random Mafia", "Random Coven", "Random Vampire"],
 };
 
 var case_lookup_base = {};
