@@ -47,7 +47,6 @@ $(function() {
 		var tg_ar_roles_enabled = $("#ar-on").prop("checked");
 		var tg_vamp_overhaul_roles_enabled = $("#vo-on").prop("checked");
 		var faction_limit = $("#faction-limit").val();
-		var mafia_must_have_leader = $("#mafia-leader").prop("checked");
 
 		role_categories = $.extend({}, role_meta_categories);
 		case_lookup = $.extend({}, case_lookup_base);
@@ -102,6 +101,10 @@ $(function() {
 				});
 			});
 			for(var role in included_roles) {
+				if(typeof test_roles[role] !== 'undefined') {
+					// Test roles are included regardless of expansions enabled
+					continue;
+				}
 				if(typeof all_roles[role].coven !== 'undefined' && all_roles[role].coven !== coven_roles_enabled) {
 					delete included_roles[role];
 				}
@@ -123,20 +126,34 @@ $(function() {
 			return a.list.length - b.list.length;
 		});
 		var selected_roles = [];
-		var mafia_roles = expandCategory("Random Mafia");
-		var coven_roles = expandCategory("Random Coven");
-		var vampire_roles = expandCategory("Random Vampire");
+		var restricted_groups = group_restrictions.map(function(entry) {
+			var normal_restrictions = [];
+			var leaders = [];
+			entry.restrictions.map(function(s) {
+				if(/^Leader /i.test(s)) {
+					leaders.push(s.slice(6).trim());
+				} else {
+					normal_restrictions.push(s);
+				}
+			});
+			return {
+				roles: new Set(entry.grouping.flatMap(s=>expandCategory(s))),
+				restrictions: new Set(normal_restrictions.map(s=>s.toLowerCase())),
+				leaders: new Set(leaders.flatMap(s=>expandCategory(s))),
+			};
+		});
 		for(var i = 0; i < rolelist_expanded.length; i++) {
 			var entry = rolelist_expanded[i];
 			var options = entry.list.filter(function(role) {
 				var role_limit = all_roles[role].limit;
 				if(selected_roles.filter(a=>a === role).length >= role_limit) return false;
-				if(faction_limit) {
-					if(mafia_roles.includes(role) && selected_roles.filter(a=>mafia_roles.includes(a)).length >= faction_limit) return false;
-					if(coven_roles.includes(role) && selected_roles.filter(a=>coven_roles.includes(a)).length >= faction_limit) return false;
-					if(vampire_roles.includes(role) && selected_roles.filter(a=>vampire_roles.includes(a)).length >= faction_limit) return false;
-				}
-				return true;
+				return restricted_groups.every(function(group) {
+					if(group.roles.has(role)) {
+						if(faction_limit && group.restrictions.has("faction") && selected_roles.filter(a=>group.roles.has(a)).length >= faction_limit) return false;
+						if(group.restrictions.has("exclusive") && selected_roles.filter(a=>group.roles.has(a)).length >= 1) return false;
+					}
+					return true;
+				});
 			});
 			var weights = options.map(function(role) {
 				return Number.isFinite(all_roles[role].weight) ? all_roles[role].weight : 1;
@@ -150,15 +167,27 @@ $(function() {
 				}
 			}
 
-			[mafia_must_have_leader ? mafia_roles : [], coven_roles, vampire_roles].map(function(faction) {
-				var default_leader = options.filter(function(role) {
-					return faction.includes(role) && all_roles[role].faction_leader;
-				}).pop();
-				var has_leader = selected_roles.find(function(role) {
-					return faction.includes(role) && all_roles[role].faction_leader;
-				});
-				if(default_leader && !has_leader && faction.includes(entry.selected_role) && !all_roles[entry.selected_role].faction_leader) {
-					entry.selected_role = default_leader;
+			restricted_groups.map(function(group) {
+				if(group.roles.has(entry.selected_role) && group.leaders.size) {
+					var has_leader = selected_roles.find(function(role) {
+						return group.leaders.has(role);
+					}) || group.leaders.has(entry.selected_role);
+					var possible_leaders = options.filter(function(role) {
+						return group.leaders.has(role);
+					});
+					if(possible_leaders.length && !has_leader) {
+						var weights = possible_leaders.map(function(role) {
+							return Number.isFinite(all_roles[role].weight) ? all_roles[role].weight : 1;
+						});
+						var rand = Math.random()*weights.reduce((a, b) => a + b, 0);
+						for(var j = 0; j < possible_leaders.length; j++) {
+							rand -= weights[j];
+							if(rand < 0) {
+								entry.selected_role = possible_leaders[j];
+								break;
+							}
+						}
+					}
 				}
 			})
 

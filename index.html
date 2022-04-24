@@ -4,14 +4,16 @@
 		<title>Testing Grounds Rolelist Randomizer</title>
 		<link rel="stylesheet" href="style.css?version=1"/>
 		<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
-		<script src="all_roles.js?version=3"></script>
+		<script src="all_roles.js?version=4"></script>
 		<script src="role_categories.js?version=2"></script>
+		<script src="group_restrictions.js"></script>
 		<script src="rolelist-presets.js"></script>
-		<script src="randomizer.js?version=4"></script>
+		<script src="randomizer.js?version=5"></script>
 	</head>
 	<body>
 		<div class="categories">
 			<label>Category Groupings:<br><textarea id="categories" rows="30" cols="30"></textarea></label>
+			<label>Group Restrictions:<br><textarea id="group_restrictions" rows="30" cols="30"></textarea></label>
 		</div>
 		<div class="options">
 			<div class="test-roles">
@@ -24,8 +26,7 @@
 			<label><input type="checkbox" id="coven-on">Enable Coven Roles</label>
 			<label title="except Vampire Overhaul roles"><input type="checkbox" id="ar-on">Enable TG Accepted Roles</label>
 			<label><input type="checkbox" id="vo-on">Enable Vampire Overhaul Roles</label>
-			<label><span title="The maximum number of roles of each informed minority faction that can appear in the game">Mafia/Coven/Vamp Limit:</span> <input type="number" value="4" min="0" max="9" size="1" id="faction-limit"><label>
-			<label><input type="checkbox" id="mafia-leader" checked>Mafia must have leader</label>
+			<label><span title="The maximum number of roles of each informed minority faction that can appear in the game">Faction Limit:</span> <input type="number" value="4" min="0" max="9" size="1" id="faction-limit"><label>
 		</div>
 		<div class="rolelist">
 			<label>Rolelist:<br><textarea id="rolelist" rows="15" cols="20"></textarea></label>
