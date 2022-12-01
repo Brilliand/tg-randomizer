@@ -55,7 +55,6 @@ var all_roles_base = {
 	"Scout": {limit: 6, tg_ar: true, category: "Mafia Support"},
 	"Seeker": {limit: 6, tg_ar: true, category: "Town Killing"},
 	"Serial Killer": {limit: 6, category: "Neutral Killing"},
-	"Servant": {limit: 6, tg_ar: true, category: "Neutral Benign"},
 	"Sheriff": {limit: 6, category: "Town Investigative"},
 	"Spy": {limit: 6, category: "Town Investigative"},
 	"Survivor": {limit: 6, category: "Neutral Benign"},
